@@ -599,10 +599,14 @@
   @keyframes obeyIn {0%,60%{opacity:0;transform:scale(.8)}66%,90%{opacity:1;transform:scale(1)}95%,100%{opacity:0}}
 
   /* the date that drifts: 14 holds, 15 (the suppressed original) glitches back in */
-  .d14{animation:date14 6s steps(1,end) infinite}
-  .d15{animation:date15 6s steps(1,end) infinite}
-  @keyframes date14{0%,80%,100%{opacity:1}82%,88%{opacity:.12}85%{opacity:1}}
-  @keyframes date15{0%,80%,100%{opacity:.0}82%,88%{opacity:.92}85%{opacity:.25}}
+  /* the textbook edit: 15 gets struck out, 14 is written in below (loops) */
+  .cal15{animation:cal15dim 6.5s linear infinite}
+  .cal-strike{transform:scaleX(0);transform-box:fill-box;transform-origin:left center;
+    animation:calStrike 6.5s linear infinite}
+  .cal14{opacity:0;animation:cal14in 6.5s linear infinite}
+  @keyframes cal15dim{0%,20%{opacity:1}34%,92%{opacity:.45}100%{opacity:1}}
+  @keyframes calStrike{0%,14%{transform:scaleX(0)}30%,92%{transform:scaleX(1)}100%{transform:scaleX(0)}}
+  @keyframes cal14in{0%,32%{opacity:0}44%,92%{opacity:1}100%{opacity:0}}
 
   /* Newspeak: words struck out and erased one by one, then the list resets */
   .nsword{animation:nsDelete 9s linear var(--d,0s) infinite}
@@ -848,7 +852,54 @@
   <aside class="notes"><p><b>SAY:</b> So who is this "Big Brother"? He's a face. He's on every wall, every coin, every screen, with those eyes that follow you around the room. He's the supreme leader of the ruling Party. And here's the strange part &mdash; the book never confirms he's a real human being at all. He might be pure invention. A logo for the state. It doesn't matter, because the watching is real. Even in the comfort of your own home you were being watched and listened to. Even in your sleep you had to stay careful &mdash; God forbid you mutter the wrong thing and get yourself in trouble.</p></aside>
 </section>
 
-<!-- SLIDE 5 — the telescreen -->
+<!-- SLIDE 5 — THE TELESCREEN title card -->
+<section class="slide prop" data-title="The Telescreen">
+  <span class="xhair tl"></span><span class="xhair tr"></span><span class="xhair bl"></span><span class="xhair br"></span>
+  <div class="kicker">the screen that watches you while you watch it</div>
+  <h1 class="title" style="font-size:13vmin">THE<br>TELESCREEN</h1>
+  <div style="position:absolute;right:5vmin;top:50%;transform:translateY(-50%);width:42vmin;z-index:2">
+    <svg class="motif-glitch" viewBox="0 0 150 108" style="width:100%;display:block;overflow:visible">
+      <defs>
+        <linearGradient id="tscone" x1="0" x2="0" y1="0" y2="1">
+          <stop offset="0%" stop-color="#ff003c" stop-opacity=".45"/>
+          <stop offset="100%" stop-color="#ff003c" stop-opacity="0"/>
+        </linearGradient>
+      </defs>
+      <!-- wall bracket -->
+      <rect x="63" y="0" width="24" height="4" fill="var(--red)"/>
+      <line x1="75" y1="4" x2="75" y2="10" stroke="var(--red)" stroke-width="2"/>
+      <!-- bezel + screen -->
+      <rect x="10" y="10" width="130" height="86" rx="4" fill="none" stroke="var(--red)" stroke-width="2.5"/>
+      <rect x="15" y="15" width="120" height="76" rx="2" fill="none" stroke="var(--red)" stroke-width=".8" opacity=".5"/>
+      <!-- scanlines -->
+      <g stroke="var(--red)" stroke-width=".6" opacity=".22">
+        <line x1="18" y1="22" x2="132" y2="22"/><line x1="18" y1="30" x2="132" y2="30"/>
+        <line x1="18" y1="38" x2="132" y2="38"/><line x1="18" y1="46" x2="132" y2="46"/>
+        <line x1="18" y1="62" x2="132" y2="62"/><line x1="18" y1="70" x2="132" y2="70"/>
+        <line x1="18" y1="78" x2="132" y2="78"/><line x1="18" y1="86" x2="132" y2="86"/>
+      </g>
+      <!-- the watching eye, projecting into the room -->
+      <path d="M75 52 L56 90 L94 90 Z" fill="url(#tscone)"/>
+      <path d="M53 52 C61 41 89 41 97 52 C89 63 61 63 53 52 Z" fill="none" stroke="var(--red)" stroke-width="2"/>
+      <g>
+        <circle cx="75" cy="52" r="9" fill="none" stroke="var(--red)" stroke-width="2"/>
+        <circle cx="75" cy="52" r="3.6" fill="var(--red-hot)" style="filter:drop-shadow(0 0 .8vmin var(--red-hot))"/>
+        <animateTransform attributeName="transform" type="translate" values="0 0;7 -2;7 -2;-7 2;-7 2;3 3;0 0;0 0" keyTimes="0;0.14;0.34;0.48;0.64;0.78;0.9;1" dur="7s" repeatCount="indefinite"/>
+      </g>
+      <!-- REC indicator -->
+      <text x="114" y="25" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="4.6" fill="var(--red-hot)">REC</text>
+      <circle cx="120" cy="23" r="2.4" fill="var(--red-hot)"><animate attributeName="opacity" values="1;.15;1" dur="1.1s" repeatCount="indefinite"/></circle>
+      <!-- speaker grille + lip -->
+      <rect x="40" y="96" width="70" height="6" rx="2" fill="none" stroke="var(--red)" stroke-width="1.6"/>
+      <g fill="var(--red)" opacity=".5">
+        <circle cx="60" cy="99" r="1.3"/><circle cx="67" cy="99" r="1.3"/><circle cx="74" cy="99" r="1.3"/><circle cx="81" cy="99" r="1.3"/><circle cx="88" cy="99" r="1.3"/>
+      </g>
+    </svg>
+  </div>
+  <aside class="notes"><p><b>SAY:</b> This is the telescreen &mdash; the machine at the centre of it all. A screen on your wall you can never switch off, broadcasting to you and watching you at the very same time. You can't tell when it's recording. So you behave as if it always is.</p></aside>
+</section>
+
+<!-- SLIDE 5b — the telescreen (Orwell quote) -->
 <section class="slide prop" data-title="The Telescreen">
   <div class="kicker">the device that watches back</div>
   <p class="quote" style="max-width:58%">"You had to live &mdash; did live, from habit that became instinct &mdash; in the assumption that every sound you made was <span class="text-glitch" data-text="overheard" style="--gd:.4s">overheard</span>, and, except in darkness, every movement scrutinized."
@@ -948,35 +999,6 @@
 
 <!-- ACT 4 — PREDICTING THE THOUGHTCRIMINAL FROM DATA -->
 
-<!-- SLIDE 11 — hand it to a government -->
-<section class="slide prop" data-title="Hand It Over">
-  <h2>Now hand your <span class="big-red">data trail</span><br>to a government.</h2>
-  <p class="lead mt4" style="max-width:60%">The Thought Police needed eyes and ears in every room.<br></p>
-  <div style="position:absolute;right:8vmin;top:50%;transform:translateY(-50%);width:26vmin;z-index:2">
-    <svg class="motif-glitch" viewBox="0 0 100 92" style="width:100%;display:block;overflow:visible">
-      <text x="50" y="6" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="6" fill="var(--red-hot)">0110 1001 0110</text>
-      <g stroke="var(--red-hot)" stroke-width="1.2" fill="none" opacity=".8">
-        <line x1="30" y1="10" x2="30" y2="20"/><path d="M27 17 L30 21 L33 17"/>
-        <line x1="50" y1="10" x2="50" y2="20"/><path d="M47 17 L50 21 L53 17"/>
-        <line x1="70" y1="10" x2="70" y2="20"/><path d="M67 17 L70 21 L73 17"/>
-      </g>
-      <path d="M10 44 L50 22 L90 44 Z" fill="none" stroke="var(--red)" stroke-width="2"/>
-      <path d="M40 36 C44 31 56 31 60 36 C56 41 44 41 40 36 Z" fill="none" stroke="var(--red-hot)" stroke-width="1.2"/>
-      <circle cx="50" cy="36" r="2" fill="var(--red-hot)"/>
-      <rect x="12" y="44" width="76" height="6" fill="none" stroke="var(--red)" stroke-width="1.6"/>
-      <g stroke="var(--red)" stroke-width="2" fill="none">
-        <line x1="20" y1="52" x2="20" y2="84"/>
-        <line x1="35" y1="52" x2="35" y2="84"/>
-        <line x1="50" y1="52" x2="50" y2="84"/>
-        <line x1="65" y1="52" x2="65" y2="84"/>
-        <line x1="80" y1="52" x2="80" y2="84"/>
-      </g>
-      <rect x="10" y="84" width="80" height="6" fill="none" stroke="var(--red)" stroke-width="1.6"/>
-    </svg>
-  </div>
-  <aside class="notes"><p><b>SAY:</b> In the book, the Thought Police needed eyes and ears in every room. A real government doesn't &mdash; it just needs the data you're already shedding: every tap, every purchase, every place you go. Hand that trail to a state with a Thought Police that wants to know whether you're an enemy, and you don't need a telescreen at all. Three real stories from the last eighteen months.</p></aside>
-</section>
-
 <!-- point to the telescreen (moved here, leads into "is it listening?") -->
 <section class="slide prop" data-title="Your Telescreen?">
   <h2 style="text-align:center">Can you point to the<br>telescreen watching you<br><span class="big-red">right now?</span></h2>
@@ -1056,8 +1078,7 @@
     <div class="row out">trained on data from <span class="ok">known</span> operatives &rarr; then scored everyone who "looked similar"</div>
     <div class="row">&nbsp;</div>
     <div class="row out">the tell &mdash; features it reportedly used:</div>
-    <div class="row warn">   in a WhatsApp group with a known militant · changing your phone every few months ·</div>
-    <div class="row warn">   moving house frequently</div>
+    <div class="row warn">   photos · cellular info · communication patterns · social media connections</div>
     <div class="row">&nbsp;</div>
     <div class="row bad">~37,000 flagged · human review reportedly ~20 sec (is the target male?) · ~10% not militants</div>
     <div class="row out">THE GOSPEL picked the <span class="warn">buildings.</span></div>
@@ -1153,14 +1174,7 @@
 
 <!-- ACT 7 — CONTROLLING THE PAST -->
 
-<!-- SLIDE 20 — who controls the past -->
-<section class="slide prop" data-title="Controls the Past">
-  <p class="quote" style="font-size:5vmin">"Who controls the <span class="big-red">past</span> controls the <span class="big-red">future</span>: who controls the <span class="big-red">present</span> controls the <span class="big-red">past.</span>"
-    <span class="src">The Party &middot; Nineteen Eighty-Four</span></p>
-  <aside class="notes"><p><b>SAY:</b> And that's the second great slogan of the Party. Who controls the past controls the future; who controls the present controls the past. If you can rewrite what happened, you control what people believe is possible. And &mdash; irony of ironies &mdash; that was Winston's actual day job.</p></aside>
-</section>
-
-<!-- SLIDE 21 — Ministry of Truth -->
+<!-- SLIDE 19 — Ministry of Truth -->
 <section class="slide term" data-title="Ministry of Truth">
   <div class="term-win">
     <div class="row warn">MINISTRY OF TRUTH &mdash; where the past gets rewritten daily</div>
@@ -1193,6 +1207,13 @@
     </svg>
   </div>
   <aside class="notes"><p><b>SAY:</b> Winston works at the Ministry of Truth &mdash; and the joke is in the name, because its job is the opposite of truth. All day, Winston edits the past. If Big Brother promised something yesterday that didn't come true, Winston rewrites yesterday's newspaper so the promise matches reality. If a country that was the enemy becomes an ally, every record that ever called them an enemy is found and changed. If a person annoys the Party, they don't just disappear &mdash; they're edited out of history as if they were never born. The originals get dropped down a chute called a "memory hole" and incinerated. There is no undo. There is no original. And here's the thing &mdash; this isn't only fiction. We do a gentler version of it, and a Pakistani historian caught us doing it.</p></aside>
+</section>
+
+<!-- SLIDE 20 — who controls the past (now follows Ministry of Truth) -->
+<section class="slide prop" data-title="Controls the Past">
+  <p class="quote" style="font-size:5vmin">"Who controls the <span class="big-red">past</span> controls the <span class="big-red">future</span>: who controls the <span class="big-red">present</span> controls the <span class="big-red">past.</span>"
+    <span class="src">The Party &middot; Nineteen Eighty-Four</span></p>
+  <aside class="notes"><p><b>SAY:</b> And that's the second great slogan of the Party. Who controls the past controls the future; who controls the present controls the past. If you can rewrite what happened, you control what people believe is possible.</p></aside>
 </section>
 
 <!-- SLIDE 22 — KK Aziz -->
@@ -1233,8 +1254,9 @@
       <line x1="8" y1="30" x2="82" y2="30" stroke="var(--red)" stroke-width="2"/>
       <line x1="26" y1="6" x2="26" y2="20" stroke="var(--red)" stroke-width="2.6"/>
       <line x1="64" y1="6" x2="64" y2="20" stroke="var(--red)" stroke-width="2.6"/>
-      <text class="d14" x="45" y="60" text-anchor="middle" font-family="Archivo,sans-serif" font-weight="900" font-size="30" fill="var(--red-hot)">14</text>
-      <text class="d15" x="45" y="60" text-anchor="middle" font-family="Archivo,sans-serif" font-weight="900" font-size="30" fill="var(--red)">15</text>
+      <text class="cal15" x="45" y="52" text-anchor="middle" font-family="Archivo,sans-serif" font-weight="900" font-size="24" fill="var(--red)">15</text>
+      <line class="cal-strike" x1="27" y1="44" x2="63" y2="44" stroke="var(--red-hot)" stroke-width="3.4"/>
+      <text class="cal14" x="45" y="78" text-anchor="middle" font-family="Archivo,sans-serif" font-weight="900" font-size="26" fill="var(--red-hot)">14</text>
     </svg>
   </div>
   <aside class="notes"><p><b>SAY:</b> Here's one that lives in every one of us. We celebrate Independence Day on the fourteenth of August. But the law that created Pakistan &mdash; the Indian Independence Act &mdash; named the fifteenth. Jinnah's very first message to the nation called the fifteenth of August "the birthday of the independent, sovereign State of Pakistan." Our own first postage stamps, printed in 1948, say "15th August 1947." The actual legal moment was midnight, between the 14th and the 15th. In the years that followed we settled on the fourteenth &mdash; for a mix of reasons, partly that Mountbatten held our ceremony in Karachi on the 14th before flying to Delhi for India's on the 15th, partly to mark our own distinct identity. I'm not here to tell you which date is "right." I'm telling you that the date drifted, the records were quietly reconciled, and now we teach one version to our children without the footnote. That's "who controls the past" &mdash; not with a memory hole. Just with a textbook.</p>
@@ -1257,6 +1279,14 @@
   <p class="ref">Chocolate ration cut to 20g while "last week the ration had been thirty grammes"; "demonstrations to thank Big Brother for raising the chocolate ration to twenty grammes a week" &mdash; 1984, Part 1, Ch. 5.</p></aside>
 </section>
 
+<!-- forget that you forgot (moved up, right after "but people remember") -->
+<section class="slide prop" data-title="Forget You Forgot">
+  <p class="quote" style="font-size:3.2vmin;max-width:96%">"To know and not to know&hellip; to forget whatever it was necessary to forget, then to draw it back into memory again at the moment when it was needed, and then promptly to forget it again: and above all, <span class="big-red">to apply the same process to the process itself</span>&hellip; consciously to induce unconsciousness, and then, once again, to become unconscious of the act of hypnosis you had just performed."
+    <span class="src">Nineteen Eighty-Four</span></p>
+  <aside class="notes"><p><b>SAY:</b> Stay with me &mdash; line by line, because this is the part that bends your brain. "To know and not to know." You hold the truth and the lie at the same time. "To forget whatever it was necessary to forget" &mdash; you push the inconvenient memory down, out of sight. "Then to draw it back into memory again at the moment when it was needed" &mdash; you can pull it up if you ever have to. "And then promptly to forget it again." And now the masterstroke &mdash; "and above all, to apply the same process to the process itself." Read that twice. You don't just forget the truth. You forget that you forgot. And then you forget that. Orwell's own words: consciously to induce unconsciousness, and then, once again, to become unconscious of the act of hypnosis you had just performed.</p>
+  <p class="ref">Doublethink definition &mdash; 1984, Part 1, Ch. 3.</p></aside>
+</section>
+
 <!-- SLIDE 25 — doublethink -->
 <section class="slide prop" data-title="Doublethink">
   <h1 class="title" style="font-size:11vmin">DOUBLE<span class="big-red">THINK</span></h1>
@@ -1275,24 +1305,6 @@
   </div>
   <aside class="notes"><p><b>SAY:</b> Doublethink is the power to hold two flatly contradictory beliefs in your head at the same time &mdash; to know they cancel each other out &mdash; and to sincerely believe both of them anyway. Orwell's cleanest version: in the end the Party would announce that two and two made five, and you would have to believe it. Not nod along. Not pretend. Believe it. Now &mdash; that already sounds impossible. But Orwell takes it one step further, into something genuinely uncanny, and I want to read you his actual description, slowly, because this is the engine the whole machine runs on.</p>
   <p class="ref">"two and two made five" &mdash; 1984, Part 1, Ch. 7 (diary; past tense "made").</p></aside>
-</section>
-
-<!-- SLIDE 26 — forget that you forgot -->
-<section class="slide prop" data-title="Forget You Forgot">
-  <p class="quote" style="font-size:3.2vmin;max-width:96%">"To know and not to know&hellip; to forget whatever it was necessary to forget, then to draw it back into memory again at the moment when it was needed, and then promptly to forget it again: and above all, <span class="big-red">to apply the same process to the process itself</span>&hellip; consciously to induce unconsciousness, and then, once again, to become unconscious of the act of hypnosis you had just performed."
-    <span class="src">Nineteen Eighty-Four</span></p>
-  <aside class="notes"><p><b>SAY:</b> Stay with me &mdash; line by line, because this is the part that bends your brain. "To know and not to know." You hold the truth and the lie at the same time. "To forget whatever it was necessary to forget" &mdash; you push the inconvenient memory down, out of sight. "Then to draw it back into memory again at the moment when it was needed" &mdash; you can pull it up if you ever have to. "And then promptly to forget it again." And now the masterstroke &mdash; "and above all, to apply the same process to the process itself." Read that twice. You don't just forget the truth. You forget that you forgot. And then you forget that. Orwell's own words: consciously to induce unconsciousness, and then, once again, to become unconscious of the act of hypnosis you had just performed. This is the difference between doublethink and ordinary lying. A liar still knows the truth underneath &mdash; that's why a liar can be caught. Doublethink is a mind that edits itself, and then erases the record of the edit, so even it can't find the original anymore. That &mdash; and only that &mdash; is how a rewritten past can feel completely real. The chocolate ration. The textbook. The quietly deleted post. It only sticks if everyone can forget, and then forget that they forgot.</p>
-  <p class="ref">Doublethink definition &mdash; 1984, Part 1, Ch. 3.</p></aside>
-</section>
-
-<!-- SLIDE 27 — doublethink in your pocket -->
-<section class="slide prop" data-title="In Your Pocket">
-  <h3>Doublethink, in your pocket</h3>
-  <div class="ptext mt3" style="max-width:90%">
-    <p><span class="hl">KNOW &amp; NOT KNOW</span> &mdash; we all say <i>"social media isn't real life."</i> Then we scroll, and feel genuinely worse measuring our real lives against it. We know it's fake. We believe it's real. <span class="big-red">At the same time.</span></p>
-    <p class="mt3"><span class="hl">FORGET THAT YOU FORGOT</span> &mdash; the scandal that consumed the whole feed last month? Gone. We didn't just move on. <span class="big-red">We forgot we were ever angry</span> &mdash; and we'll do it again next week, as if for the first time.</p>
-  </div>
-  <aside class="notes"><p><b>SAY:</b> And before anyone files this under "fiction" &mdash; we do it daily, on the device in your pocket. Two quick ones, matching the two halves of what Orwell just described. First, to know and not to know. Every one of us says it: "social media isn't real life, it's all filtered and staged." We know that. And then we scroll, and we feel genuinely worse about our own lives, measuring them against a feed we just told ourselves was fake. We know it isn't real and we believe it is, in the same breath. Second &mdash; the deep one &mdash; forgetting that you forgot. Think of the scandal that took over your entire feed a few weeks ago. Everyone furious, everyone certain. Where is it now? Gone. And here's the doublethink: we didn't just calm down &mdash; we forgot we were ever that angry. We forgot the forgetting. And next week we'll do it again, with total conviction, as if for the very first time. Doublethink isn't a dystopian superpower. It's Tuesday.</p></aside>
 </section>
 
 <!-- ACT 9 — NEWSPEAK -->
@@ -1341,7 +1353,7 @@
 <section class="slide prop" data-title="The Versificator">
   <p class="quote" style="font-size:3.4vmin;max-width:60%">"&hellip;rubbishy newspapers containing almost nothing except sport, crime and astrology&hellip; and sentimental songs which were composed entirely by mechanical means on a special kind of kaleidoscope known as a <span class="big-red">versificator.</span>"
     <span class="src">Nineteen Eighty-Four</span></p>
-  <p class="ptext mt3" style="max-width:58%">machine-made content, at infinite scale, to fill the silence where a thought might go. <span class="hl">Nov 2024: AI-written articles overtook human-written ones online.</span> (NewsGuard tracks 1,200+ AI "news" sites.)</p>
+  <p class="ptext mt3" style="max-width:58%">machine-made content, at infinite scale, <span class="hl">to fill the silence where a thought might go.</span></p>
   <div style="position:absolute;right:7vmin;top:50%;transform:translateY(-50%);width:22vmin;z-index:2">
   <svg class="motif-glitch" viewBox="0 0 110 76" style="width:100%;display:block;overflow:visible">
     <rect x="36" y="0" width="32" height="12" fill="none" stroke="var(--red-hot)" stroke-width="1.2"/>
