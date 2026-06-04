@@ -457,6 +457,209 @@
     font-family:var(--mono);font-size:1.3vmin;letter-spacing:.18em;color:#3a3a3a;text-transform:uppercase;pointer-events:none}
   .help b{color:var(--dim)}
 
+  /* ---------------------- SLIDE 1 — LIVE SURVEILLANCE EYE ---------------------- */
+  /* A giant eye that tracks the cursor: "Big Brother is watching YOU."
+     Positioning lives only on .bb-stage; every animated part is a child,
+     so no animation ever clobbers the centering transform. */
+  .bb-stage{
+    position:absolute;right:6vmin;top:50%;transform:translateY(-50%);
+    width:50vmin;height:50vmin;z-index:2;pointer-events:none;
+  }
+  /* radar lock-on rings expanding outward from the eye */
+  .bb-ring{
+    position:absolute;left:50%;top:50%;width:50vmin;height:50vmin;
+    border:1px solid var(--red);border-radius:50%;
+    transform:translate(-50%,-50%) scale(.34);opacity:0;
+    animation:bbRing 4.8s ease-out infinite;
+  }
+  .bb-ring.d2{animation-delay:1.6s}
+  .bb-ring.d3{animation-delay:3.2s}
+  @keyframes bbRing{
+    0%{transform:translate(-50%,-50%) scale(.34);opacity:0}
+    12%{opacity:.5}
+    100%{transform:translate(-50%,-50%) scale(1.04);opacity:0}
+  }
+  /* slowly-rotating dashed reticle dish */
+  .bb-reticle{
+    position:absolute;left:50%;top:50%;width:46vmin;height:46vmin;
+    transform:translate(-50%,-50%);opacity:.45;
+    animation:bbSpin 26s linear infinite;
+  }
+  @keyframes bbSpin{to{transform:translate(-50%,-50%) rotate(360deg)}}
+  /* fixed N/S/E/W crosshair ticks (do not spin) */
+  .bb-ticks{
+    position:absolute;left:50%;top:50%;width:48vmin;height:48vmin;
+    transform:translate(-50%,-50%);opacity:.55;
+  }
+  /* the eye core — blink lives here so it can't fight the glitch transform */
+  .bb-eyeblink{
+    position:absolute;left:50%;top:50%;width:42vmin;
+    transform:translate(-50%,-50%);transform-origin:center;
+    animation:bbBlink 6.6s ease-in-out infinite;
+  }
+  @keyframes bbBlink{
+    0%,92%,100%{transform:translate(-50%,-50%) scaleY(1)}
+    95%{transform:translate(-50%,-50%) scaleY(.07)}
+  }
+  .bb-eye-core{width:100%;display:block;filter:drop-shadow(0 0 2.6vmin rgba(255,0,60,.4))}
+  #bbPupil{filter:drop-shadow(0 0 1.2vmin var(--red-hot))}
+  /* horizontal scan bar sweeping across the eye */
+  .bb-scanbar{
+    position:absolute;left:50%;top:50%;width:42vmin;height:2px;
+    transform:translate(-50%,-50%);
+    background:linear-gradient(90deg,transparent,var(--red-hot),transparent);
+    filter:drop-shadow(0 0 .6vmin var(--red-hot));opacity:0;
+    animation:bbScan 4.2s linear infinite;
+  }
+  @keyframes bbScan{
+    0%{top:32%;opacity:0}10%{opacity:.8}90%{opacity:.8}100%{top:68%;opacity:0}
+  }
+  /* surveillance HUD caption under the eye */
+  .bb-cap{
+    position:absolute;left:50%;bottom:-1vmin;transform:translateX(-50%);
+    font-family:var(--mono);font-size:1.3vmin;letter-spacing:.34em;
+    text-transform:uppercase;color:var(--red);white-space:nowrap;
+    text-align:center;user-select:none;
+  }
+  .bb-cap .rec{color:var(--red-hot)}
+  .bb-cap .dot{animation:blink 1.1s steps(1) infinite}
+  .bb-cap .coord{color:var(--dim);letter-spacing:.22em}
+  /* top-right live-feed clock */
+  .bb-feed{
+    position:absolute;right:9vmin;top:6.5vmin;z-index:3;
+    font-family:var(--mono);font-size:1.3vmin;letter-spacing:.3em;
+    text-transform:uppercase;color:var(--dim);pointer-events:none;user-select:none;
+  }
+  .bb-feed .on{color:var(--red-hot)}
+  .bb-feed .dot{animation:blink 1.1s steps(1) infinite}
+
+  /* ====================== AUTONOMOUS ANIMATION KIT (no cursor) ======================
+     Inactive slides are display:none, so any animation on their children RESTARTS
+     every time the slide becomes .active. That gives us free entrance choreography
+     that re-plays each time you advance to a slide — and a few self-playing moments. */
+
+  /* ---- entrance choreography: text cascades in as each slide appears ---- */
+  @keyframes inUp{from{opacity:0;transform:translateY(3.2vmin)}to{opacity:1;transform:none}}
+  @keyframes inRow{from{opacity:0;transform:translateX(-1.6vmin)}to{opacity:1;transform:none}}
+  @keyframes inFade{from{opacity:0}to{opacity:1}}
+  .slide.active .kicker,
+  .slide.active .commit,
+  .slide.active .intercept{animation:inUp .5s cubic-bezier(.2,.7,.2,1) both}
+  .slide.active h1.title,
+  .slide.active h2,
+  .slide.active h3{animation:inUp .58s cubic-bezier(.2,.7,.2,1) both .05s}
+  .slide.active .lead{animation:inUp .6s cubic-bezier(.2,.7,.2,1) both .15s}
+  .slide.active .ptext,
+  .slide.active .quote,
+  .slide.active .slogans,
+  .slide.active .stamp,
+  .slide.active .audio-wave{animation:inUp .62s cubic-bezier(.2,.7,.2,1) both .24s}
+  /* terminal windows: rows type in one after another */
+  .slide.active .term-win .row{animation:inRow .34s ease-out both}
+  .slide.active .term-win .row:nth-child(1){animation-delay:.05s}
+  .slide.active .term-win .row:nth-child(2){animation-delay:.1s}
+  .slide.active .term-win .row:nth-child(3){animation-delay:.15s}
+  .slide.active .term-win .row:nth-child(4){animation-delay:.2s}
+  .slide.active .term-win .row:nth-child(5){animation-delay:.25s}
+  .slide.active .term-win .row:nth-child(6){animation-delay:.3s}
+  .slide.active .term-win .row:nth-child(7){animation-delay:.35s}
+  .slide.active .term-win .row:nth-child(8){animation-delay:.4s}
+  .slide.active .term-win .row:nth-child(9){animation-delay:.45s}
+  .slide.active .term-win .row:nth-child(10){animation-delay:.5s}
+  .slide.active .term-win .row:nth-child(11){animation-delay:.55s}
+  .slide.active .term-win .row:nth-child(12){animation-delay:.6s}
+  .slide.active .term-win .row:nth-child(13){animation-delay:.65s}
+  .slide.active .term-win .row:nth-child(14){animation-delay:.7s}
+  .slide.active .term-win .row:nth-child(n+15){animation-delay:.75s}
+
+  /* ---- self-playing motif moments ---- */
+  /* targeting reticle locks on when the slide appears (one-shot, replays on revisit) */
+  @keyframes lockOn{
+    0%{transform:scale(2.2) rotate(-12deg);opacity:0}
+    55%{opacity:1}
+    70%{transform:scale(.92) rotate(0);opacity:1}
+    82%{transform:scale(1.04)}
+    100%{transform:scale(1) rotate(0);opacity:1}
+  }
+  .slide.active .lock-target{animation:lockOn 1s cubic-bezier(.3,1.3,.4,1) both .2s;
+    transform-box:fill-box;transform-origin:center}
+
+  /* DOUBLETHINK: 2 + 2 = 4, which keeps becoming 5 on its own */
+  .bb-eq{font-family:var(--display);font-weight:900;font-size:6.4vmin;letter-spacing:.04em;
+    color:#fff;margin-top:3.4vmin;display:flex;align-items:center;gap:.18em}
+  .bb-eq .res{position:relative;display:inline-block;min-width:.75em;text-align:center;color:var(--red)}
+  .bb-eq .four{animation:fourOut 5.5s steps(1,end) infinite}
+  .bb-eq .five{position:absolute;left:0;right:0;color:var(--red-hot);
+    text-shadow:0 0 1.8vmin var(--red-hot);animation:fiveIn 5.5s steps(1,end) infinite}
+  .bb-eq .obey{font-family:var(--mono);font-weight:700;font-size:1.5vmin;letter-spacing:.34em;
+    color:var(--red-hot);align-self:center;animation:obeyIn 5.5s steps(1,end) infinite;
+    border:1px solid var(--red-hot);padding:.5vmin 1vmin}
+  @keyframes fourOut{0%,58%{opacity:1}62%,92%{opacity:0}96%,100%{opacity:1}}
+  @keyframes fiveIn {0%,58%{opacity:0}62%,92%{opacity:1}96%,100%{opacity:0}}
+  @keyframes obeyIn {0%,60%{opacity:0;transform:scale(.8)}66%,90%{opacity:1;transform:scale(1)}95%,100%{opacity:0}}
+
+  /* the date that drifts: 14 holds, 15 (the suppressed original) glitches back in */
+  .d14{animation:date14 6s steps(1,end) infinite}
+  .d15{animation:date15 6s steps(1,end) infinite}
+  @keyframes date14{0%,80%,100%{opacity:1}82%,88%{opacity:.12}85%{opacity:1}}
+  @keyframes date15{0%,80%,100%{opacity:.0}82%,88%{opacity:.92}85%{opacity:.25}}
+
+  /* Newspeak: words struck out and erased one by one, then the list resets */
+  .nsword{animation:nsDelete 9s linear var(--d,0s) infinite}
+  .nsstrike{transform:scaleX(0);transform-box:fill-box;transform-origin:left center;
+    animation:nsStrike 9s linear var(--d,0s) infinite}
+  @keyframes nsDelete{0%,8%{opacity:1}18%,96%{opacity:.12}100%{opacity:1}}
+  @keyframes nsStrike{0%,7%{transform:scaleX(0)}14%,95%{transform:scaleX(1)}100%{transform:scaleX(0)}}
+
+  /* chocolate ration: 30 g rewritten to 20 g, then "RAISED" — plays on slide entry */
+  .ration{font-family:var(--mono);margin-top:4vmin;display:flex;align-items:center;gap:2.2vmin;
+    font-size:3.4vmin;font-weight:700}
+  .ration .was{position:relative;color:var(--ink)}
+  .ration .was::after{content:"";position:absolute;left:-6%;right:-6%;top:52%;height:.22em;
+    background:var(--red-hot);transform:scaleX(0);transform-origin:left;
+    animation:ratStrike .5s ease-out forwards 1.1s}
+  .slide.active .ration .was{animation:ratFade .5s ease-out forwards 1.7s}
+  .ration .arrow{color:var(--dim);opacity:0;animation:ratIn .4s ease forwards 1.5s}
+  .ration .now{color:var(--red-hot);text-shadow:0 0 1.6vmin var(--red-hot);opacity:0;
+    animation:ratIn .5s ease forwards 1.9s}
+  .ration .tag{font-family:var(--mono);font-size:1.5vmin;font-weight:700;letter-spacing:.28em;
+    color:var(--red-hot);border:1px solid var(--red-hot);padding:.5vmin 1vmin;opacity:0;
+    transform:scale(.7) rotate(-4deg);animation:ratTag .5s cubic-bezier(.3,1.4,.4,1) forwards 2.5s}
+  @keyframes ratStrike{to{transform:scaleX(1)}}
+  @keyframes ratFade{to{opacity:.32}}
+  @keyframes ratIn{to{opacity:1}}
+  @keyframes ratTag{to{opacity:1;transform:scale(1) rotate(-4deg)}}
+
+  /* ---- FINALE: the surveillance feed returns (bookend of slide 1) ---- */
+  /* the book's last line, centered under "WINSTON LOST." */
+  .end-lastline{font-family:var(--display);font-style:italic;font-weight:800;
+    font-size:3.8vmin;text-align:center;color:#fff;margin-top:1.8vmin;letter-spacing:-.01em}
+  /* one HUD strip above the eye: the opener's four words + REC + the same live clock */
+  .end-feed{position:absolute;left:50%;bottom:22vmin;transform:translateX(-50%);
+    font-family:var(--mono);font-size:1.4vmin;letter-spacing:.4em;text-transform:uppercase;
+    color:var(--red);white-space:nowrap;text-align:center;z-index:2;opacity:0;
+    text-shadow:0 0 1.2vmin rgba(255,0,60,.35);animation:endWhisper 3s ease-out forwards 1s}
+  .end-feed b{color:var(--red-hot);font-weight:700}
+  .end-feed .dot{color:var(--red-hot);animation:blink 1.1s steps(1) infinite}
+  .end-feed .bb-clock{color:var(--dim);letter-spacing:.22em}
+  .end-stage{position:absolute;left:50%;bottom:5vmin;transform:translateX(-50%);
+    width:30vmin;height:17vmin;z-index:2;pointer-events:none}
+  .end-ring{position:absolute;left:50%;top:50%;width:30vmin;height:30vmin;
+    border:1px solid var(--red);border-radius:50%;
+    transform:translate(-50%,-50%) scale(.34);opacity:0;animation:bbRing 4.8s ease-out infinite}
+  .end-ring.d2{animation-delay:1.6s}
+  .end-ring.d3{animation-delay:3.2s}
+  .end-eyewrap{position:absolute;left:50%;top:50%;width:22vmin;
+    transform:translate(-50%,-50%);transform-origin:center;
+    animation:bbBlink 6.6s ease-in-out infinite}
+  .end-eye{width:100%;display:block;filter:drop-shadow(0 0 2.2vmin rgba(255,0,60,.42))}
+  #endPupil{filter:drop-shadow(0 0 1.2vmin var(--red-hot))}
+  .end-scan{position:absolute;left:50%;top:50%;width:22vmin;height:2px;
+    transform:translate(-50%,-50%);
+    background:linear-gradient(90deg,transparent,var(--red-hot),transparent);
+    filter:drop-shadow(0 0 .6vmin var(--red-hot));opacity:0;animation:bbScan 4.2s linear infinite}
+  @keyframes endWhisper{0%{opacity:0;letter-spacing:.7em}60%{opacity:.85}100%{opacity:.85;letter-spacing:.4em}}
+
   @media (max-width:760px){
     h1.title{font-size:11vmin}.lead{max-width:100%}.ptext{max-width:100%}.row-split{flex-direction:column;gap:3vmin}
   }
@@ -477,27 +680,47 @@
 <section class="slide prop" data-title="Big Brother">
   <span class="xhair tl"></span><span class="xhair tr"></span><span class="xhair bl"></span><span class="xhair br"></span>
   <div class="pin-tl kicker">Surveillance // a story in 10 parts</div>
+  <div class="bb-feed"><span class="on"><span class="dot">●</span> LIVE</span> · CAM&nbsp;01 · REC <span id="bbClock" class="bb-clock">00:00:00</span></div>
   <div style="position:relative;z-index:2">
-    <h1 class="title">Big&nbsp;Brother<br>is&nbsp;<span class="big-red">Watching</span><br>You.</h1>
+    <h1 class="title">Big&nbsp;Brother<br>is&nbsp;<span class="big-red text-glitch" data-text="Watching">Watching</span><br>You.</h1>
   </div>
-  <div style="position:absolute;right:5vmin;bottom:6vmin;width:44vmin;z-index:2">
-    <svg class="motif-glitch" viewBox="0 0 170 120" style="width:100%;display:block;overflow:visible">
-      <defs>
-        <g id="bbeye">
-          <path d="M0 12 C9 0 31 0 40 12 C31 24 9 24 0 12 Z" fill="none" stroke="var(--red)" stroke-width="1.6"/>
-          <circle cx="20" cy="12" r="6" fill="none" stroke="var(--red)" stroke-width="1.6"/>
-          <circle cx="20" cy="12" r="2.4" fill="var(--red-hot)"/>
-        </g>
-      </defs>
-      <use href="#bbeye" transform="translate(58,40) scale(1.55)"/>
-      <use href="#bbeye" transform="translate(4,6) scale(0.7)" opacity=".85"/>
-      <use href="#bbeye" transform="translate(120,2) scale(0.85)" opacity=".85"/>
-      <use href="#bbeye" transform="translate(130,56) scale(0.6)" opacity=".6"/>
-      <use href="#bbeye" transform="translate(0,74) scale(0.95)" opacity=".75"/>
-      <use href="#bbeye" transform="translate(74,94) scale(0.7)" opacity=".7"/>
-      <use href="#bbeye" transform="translate(126,98) scale(0.55)" opacity=".5"/>
+
+  <!-- live surveillance eye: tracks the cursor (see script at end of file) -->
+  <div class="bb-stage">
+    <span class="bb-ring"></span><span class="bb-ring d2"></span><span class="bb-ring d3"></span>
+
+    <svg class="bb-reticle" viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="47" fill="none" stroke="var(--red)" stroke-width=".5" stroke-dasharray="1 5"/>
+      <circle cx="50" cy="50" r="40" fill="none" stroke="var(--red)" stroke-width=".4" stroke-dasharray=".6 8"/>
     </svg>
+
+    <svg class="bb-ticks" viewBox="0 0 100 100">
+      <g stroke="var(--red)" stroke-width=".8">
+        <line x1="50" y1="1" x2="50" y2="7"/><line x1="50" y1="93" x2="50" y2="99"/>
+        <line x1="1" y1="50" x2="7" y2="50"/><line x1="93" y1="50" x2="99" y2="50"/>
+      </g>
+    </svg>
+
+    <div class="bb-eyeblink">
+      <svg class="bb-eye-core motif-glitch" viewBox="0 0 220 130" style="overflow:visible">
+        <!-- eyelid almond -->
+        <path d="M8 65 C46 16 174 16 212 65 C174 114 46 114 8 65 Z"
+              fill="none" stroke="var(--red)" stroke-width="2.4"/>
+        <!-- iris (this whole group rotates toward the cursor) -->
+        <g id="bbIris">
+          <circle cx="110" cy="65" r="35" fill="none" stroke="var(--red)" stroke-width="2.2"/>
+          <circle cx="110" cy="65" r="31" fill="none" stroke="var(--red)" stroke-width=".9" stroke-dasharray="2 4" opacity=".8"/>
+          <circle cx="110" cy="65" r="24" fill="none" stroke="var(--red)" stroke-width=".7" stroke-dasharray="1.5 5" opacity=".6"/>
+          <circle id="bbPupil" cx="110" cy="65" r="12" fill="var(--red-hot)"/>
+          <circle cx="105" cy="59" r="3" fill="#fff" opacity=".85"/>
+        </g>
+      </svg>
+    </div>
+
+    <span class="bb-scanbar"></span>
+    <div class="bb-cap"><span class="rec"><span class="dot">●</span> REC</span> · SUBJECT:&nbsp;YOU · <span class="coord" id="bbCoord">AZ +00 EL +00</span></div>
   </div>
+
   <aside class="notes"><p><b>SAY:</b> Read that again. Big Brother is watching you. Four words that have outlived the book they came from. Tonight I want to start not with a plot summary, but with a feeling &mdash; the feeling those four words give you.</p></aside>
 </section>
 
@@ -536,8 +759,11 @@
     <svg class="motif-glitch" viewBox="0 0 200 110" style="width:100%;display:block;overflow:visible">
       <g transform="translate(68,0)">
         <path d="M0 22 C16 4 48 4 64 22 C48 40 16 40 0 22 Z" fill="none" stroke="var(--red)" stroke-width="2"/>
-        <circle cx="32" cy="22" r="9" fill="none" stroke="var(--red)" stroke-width="2"/>
-        <circle cx="32" cy="22" r="3.4" fill="var(--red-hot)"/>
+        <g>
+          <circle cx="32" cy="22" r="9" fill="none" stroke="var(--red)" stroke-width="2"/>
+          <circle cx="32" cy="22" r="3.4" fill="var(--red-hot)"/>
+          <animateTransform attributeName="transform" type="translate" values="0 0;7 -2;7 -2;-7 2;-7 2;3 4;0 0;0 0" keyTimes="0;0.14;0.32;0.46;0.62;0.76;0.9;1" dur="7s" repeatCount="indefinite"/>
+        </g>
       </g>
       <line x1="0" y1="104" x2="200" y2="104" stroke="var(--red)" stroke-width="1.5"/>
       <g fill="none" stroke="var(--red)" stroke-width="1.8">
@@ -574,19 +800,49 @@
 <section class="slide prop" data-title="Who Is Big Brother">
   <h2>Who is<br>Big Brother?</h2>
   <p class="ptext mt3" style="max-width:56%">The face on every poster. The leader of <span class="hl">The Party</span>, the group that rules Oceania. He may not be a real person at all &mdash; he might just be a <span class="hl">brand</span> for power itself. And he is always, always watching.</p>
-  <div class="eye-wrap glitch" style="position:absolute;right:9vmin;top:50%;transform:translateY(-50%);width:28vmin;z-index:2">
-    <svg class="motif big" viewBox="0 0 120 70" style="width:100%">
-      <path d="M4 35 C28 6 92 6 116 35 C92 64 28 64 4 35 Z" fill="none" stroke="var(--red)" stroke-width="2.2"/>
-      <circle cx="60" cy="35" r="16" fill="none" stroke="var(--red)" stroke-width="2.2"/>
-      <circle cx="60" cy="35" r="5.5" fill="var(--red-hot)"/>
-    </svg>
-    <svg class="motif eye-ghost r" viewBox="0 0 120 70" style="width:100%">
-      <path d="M4 35 C28 6 92 6 116 35 C92 64 28 64 4 35 Z" fill="none" stroke="#ff003c" stroke-width="2.2"/>
-      <circle cx="60" cy="35" r="16" fill="none" stroke="#ff003c" stroke-width="2.2"/>
-    </svg>
-    <svg class="motif eye-ghost b" viewBox="0 0 120 70" style="width:100%">
-      <path d="M4 35 C28 6 92 6 116 35 C92 64 28 64 4 35 Z" fill="none" stroke="#00b3ff" stroke-width="2.2"/>
-      <circle cx="60" cy="35" r="16" fill="none" stroke="#00b3ff" stroke-width="2.2"/>
+  <div style="position:absolute;right:8vmin;top:50%;transform:translateY(-50%);width:27vmin;z-index:2">
+    <svg class="motif-glitch" viewBox="0 0 140 200" style="width:100%;display:block;overflow:visible">
+      <!-- poster frame -->
+      <rect x="3" y="3" width="134" height="194" fill="none" stroke="var(--red)" stroke-width="2"/>
+      <rect x="7.5" y="7.5" width="125" height="185" fill="none" stroke="var(--red)" stroke-width=".6" opacity=".45"/>
+      <!-- severe hairline -->
+      <path d="M31 58 C32 31 50 21 70 21 C90 21 108 31 109 58 C99 48 88 45 70 45 C52 45 41 48 31 58 Z"
+            fill="var(--red)" fill-opacity=".22" stroke="var(--red)" stroke-width="1.6"/>
+      <path d="M70 23 L66 45" stroke="var(--red)" stroke-width=".8" opacity=".45"/>
+      <!-- head -->
+      <path d="M34 60 C34 38 50 30 70 30 C90 30 106 38 106 60 L106 98 C106 118 92 134 70 134 C48 134 34 118 34 98 Z"
+            fill="none" stroke="var(--red)" stroke-width="2"/>
+      <path d="M34 80 C29 80 29 90 34 90" fill="none" stroke="var(--red)" stroke-width="1.4"/>
+      <path d="M106 80 C111 80 111 90 106 90" fill="none" stroke="var(--red)" stroke-width="1.4"/>
+      <!-- heavy scowling brows -->
+      <path d="M44 68 L64 73" stroke="var(--red)" stroke-width="3.6" stroke-linecap="round"/>
+      <path d="M96 68 L76 73" stroke="var(--red)" stroke-width="3.6" stroke-linecap="round"/>
+      <!-- staring eyes -->
+      <path d="M46 82 C52 76 62 76 67 82 C62 88 52 88 46 82 Z" fill="none" stroke="var(--red)" stroke-width="1.6"/>
+      <path d="M73 82 C78 76 88 76 94 82 C88 88 78 88 73 82 Z" fill="none" stroke="var(--red)" stroke-width="1.6"/>
+      <g style="filter:drop-shadow(0 0 1vmin var(--red-hot))">
+        <circle cx="56.5" cy="82" r="3.4" fill="var(--red-hot)"/>
+        <circle cx="83.5" cy="82" r="3.4" fill="var(--red-hot)"/>
+        <animate attributeName="opacity" values="1;.5;1" dur="2.6s" repeatCount="indefinite"/>
+      </g>
+      <!-- nose -->
+      <path d="M70 84 L66 100 L74 100" fill="none" stroke="var(--red)" stroke-width="1.3" opacity=".75"/>
+      <!-- the iconic heavy moustache -->
+      <path d="M50 106 C58 102 66 103 70 107 C74 103 82 102 90 106 C87 115 78 118 70 113 C62 118 53 115 50 106 Z"
+            fill="var(--red)" stroke="var(--red-hot)" stroke-width=".7"/>
+      <!-- stern mouth + jaw -->
+      <line x1="60" y1="118" x2="80" y2="118" stroke="var(--red)" stroke-width="1.5" opacity=".6"/>
+      <path d="M50 124 C58 130 82 130 90 124" fill="none" stroke="var(--red)" stroke-width=".8" opacity=".4"/>
+      <!-- neck + party uniform collar -->
+      <line x1="60" y1="132" x2="58" y2="150" stroke="var(--red)" stroke-width="1.6"/>
+      <line x1="80" y1="132" x2="82" y2="150" stroke="var(--red)" stroke-width="1.6"/>
+      <path d="M22 172 L22 158 L58 144 L70 152 L82 144 L118 158 L118 172" fill="none" stroke="var(--red)" stroke-width="2"/>
+      <path d="M58 144 L70 158 L82 144" fill="none" stroke="var(--red)" stroke-width="1.4"/>
+      <circle cx="70" cy="150" r="4.5" fill="none" stroke="var(--red-hot)" stroke-width="1.4"/>
+      <path d="M70 147.5 L72.2 151.5 L67.8 151.5 Z" fill="var(--red-hot)"/>
+      <!-- slogan plate -->
+      <rect x="7.5" y="174" width="125" height="18.5" fill="var(--red)" opacity=".14"/>
+      <text x="70" y="187" text-anchor="middle" font-family="Archivo,sans-serif" font-weight="900" font-size="11" letter-spacing="2" fill="var(--red-hot)">BIG BROTHER</text>
     </svg>
   </div>
   <aside class="notes"><p><b>SAY:</b> So who is this "Big Brother"? He's a face. He's on every wall, every coin, every screen, with those eyes that follow you around the room. He's the supreme leader of the ruling Party. And here's the strange part &mdash; the book never confirms he's a real human being at all. He might be pure invention. A logo for the state. It doesn't matter, because the watching is real. Even in the comfort of your own home you were being watched and listened to. Even in your sleep you had to stay careful &mdash; God forbid you mutter the wrong thing and get yourself in trouble.</p></aside>
@@ -597,8 +853,8 @@
   <div class="kicker">the device that watches back</div>
   <p class="quote" style="max-width:58%">"You had to live &mdash; did live, from habit that became instinct &mdash; in the assumption that every sound you made was <span class="text-glitch" data-text="overheard" style="--gd:.4s">overheard</span>, and, except in darkness, every movement scrutinized."
     <span class="src">Nineteen Eighty-Four</span></p>
-  <div style="position:absolute;right:6vmin;top:50%;transform:translateY(-50%);width:24vmin;z-index:2">
-    <svg viewBox="0 0 90 60" class="motif-glitch" style="width:100%;overflow:visible;display:block">
+  <div style="position:absolute;right:7vmin;top:50%;transform:translateY(-50%);width:26vmin;z-index:2">
+    <svg viewBox="0 0 64 60" class="motif-glitch" style="width:100%;overflow:visible;display:block">
       <defs>
         <linearGradient id="conegrad" x1="1" x2="0" y1="0" y2="0">
           <stop offset="0%" stop-color="#ff003c" stop-opacity="0.55"/>
@@ -627,52 +883,6 @@
   <p class="ref">1984, Part 1, Ch. 1.</p></aside>
 </section>
 
-<!-- ACT 2 — THE TELESCREEN YOU CAN'T SEE -->
-
-<!-- SLIDE 6 — point to the telescreen -->
-<section class="slide prop" data-title="Your Telescreen?">
-  <h2 style="text-align:center">Can you point to the<br>telescreen watching you<br><span class="big-red">right now?</span></h2>
-  <p class="ptext mt4" style="max-width:74%;margin:0 auto;text-align:center">You probably pictured a <span class="hl">camera.</span> The most powerful one has no lens, no microphone &mdash; and you carry it everywhere. It watches what you <span class="hl">do</span>, not what you <span class="hl">say</span>.</p>
-  <aside class="notes"><p><b>SAY:</b> Quick one for the room &mdash; point to the telescreen watching you right now. (Let them guess.) Most of you pictured a camera, a lens, maybe your phone's front-facing cam. Here's the unsettling part: the most powerful telescreen pointed at you has no lens and no microphone at all. It never needs to see your face or hear your voice. It just reads what you do &mdash; every tap, every purchase, every place you go &mdash; and from that alone it knows you better than any camera could. Let me show you. They don't need to watch or listen to you to know everything about you.</p></aside>
-</section>
-
-<!-- SLIDE 7 — your digital fingerprint -->
-<section class="slide term" data-title="Digital Fingerprint">
-  <div class="term-win">
-    <div class="row warn">THEY DON'T NEED TO WATCH OR LISTEN</div>
-    <div class="row">&nbsp;</div>
-    <div class="row out">your <span class="ok">browser</span> is a fingerprint &mdash; <span class="warn">84%</span> are one-of-a-kind, no login (EFF, 2010)</div>
-    <div class="row out"><span class="ok">data brokers</span>: one firm holds <span class="warn">3,000 data points</span> on nearly every American (US FTC, 2014)</div>
-    <div class="row out"><span class="ok">Target</span> built a "pregnancy score" from your shopping &mdash; then mailed the baby coupons</div>
-    <div class="row out">Facebook <span class="ok">"likes"</span> judged you better than a <span class="warn">friend at 70</span>, your <span class="bad">spouse at 300</span> (Cambridge, 2015)</div>
-    <div class="row">&nbsp;</div>
-    <div class="row bad">no camera. no mic. the data already knows.</div>
-    <div class="row blink ok">&#9608;</div>
-  </div>
-  <div style="position:absolute;right:8vmin;top:50%;transform:translateY(-50%);width:24vmin;z-index:2">
-    <svg class="motif-glitch" viewBox="0 0 80 96" style="width:100%;display:block;overflow:visible">
-      <ellipse cx="38" cy="40" rx="30" ry="34" fill="none" stroke="var(--red)" stroke-width="2"/>
-      <ellipse cx="39" cy="41" rx="23" ry="27" fill="none" stroke="var(--red)" stroke-width="2"/>
-      <ellipse cx="40" cy="42" rx="17" ry="20" fill="none" stroke="var(--red)" stroke-width="2"/>
-      <ellipse cx="41" cy="42" rx="11" ry="13" fill="none" stroke="var(--red)" stroke-width="2"/>
-      <ellipse cx="41" cy="42" rx="5" ry="6" fill="none" stroke="var(--red)" stroke-width="2"/>
-      <circle cx="41" cy="42" r="1.6" fill="var(--red-hot)"/>
-      <line x1="6" y1="10" x2="74" y2="10" stroke="var(--red-hot)" stroke-width=".9" opacity=".75">
-        <animate attributeName="y1" values="10;68;10" dur="2.6s" repeatCount="indefinite"/>
-        <animate attributeName="y2" values="10;68;10" dur="2.6s" repeatCount="indefinite"/>
-      </line>
-      <path d="M4 14 L4 6 L12 6" fill="none" stroke="var(--red-hot)" stroke-width="1.2"/>
-      <path d="M68 6 L76 6 L76 14" fill="none" stroke="var(--red-hot)" stroke-width="1.2"/>
-      <path d="M76 64 L76 72 L68 72" fill="none" stroke="var(--red-hot)" stroke-width="1.2"/>
-      <path d="M12 72 L4 72 L4 64" fill="none" stroke="var(--red-hot)" stroke-width="1.2"/>
-      <text x="40" y="84" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="5" fill="var(--red-hot)">PROFILE: YOU</text>
-      <text x="40" y="92" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="3.6" fill="var(--red)" opacity=".7">3,000+ DATA POINTS</text>
-    </svg>
-  </div>
-  <aside class="notes"><p><b>SAY:</b> Three things &mdash; and not one of them needs a camera or a microphone. One &mdash; your browser. The exact way your device is set up, your fonts, your screen size, your settings, is so specific that as far back as 2010 the EFF found 84% of browsers were completely one-of-a-kind. You're identifiable the moment you load a page, without ever typing your name. Two &mdash; data brokers. Companies you've never heard of whose entire business is keeping a file on you. In 2014 the US government found one of them holding three thousand separate facts on nearly every single American &mdash; where you live, your health, your habits, your money. Three &mdash; what they can predict from it. The American store Target built a "pregnancy prediction" score purely from shopping patterns and quietly started mailing baby coupons. The story that went viral was a furious father storming in over coupons sent to his teenage daughter, who, it turned out, was pregnant. That story may have grown in the telling &mdash; but the capability was real and on the record. And Cambridge researchers showed that from your Facebook likes alone, a computer could read your personality better than a friend after seventy likes, and better than your husband or wife after three hundred. No camera. No microphone. The data already knows.</p>
-  <p class="ref">EFF Panopticlick 2010 (84% unique). US FTC, "Data Brokers", May 2014 (one broker, 3,000 data segments / nearly every US consumer). Target: NYT Magazine (Duhigg, 2012) &mdash; father anecdote = "the story that went viral"; the model is verified. Facebook likes: Youyou/Kosinski/Stillwell, PNAS 2015 (70/300 ladder). Modern echo: FTC v. X-Mode/Outlogic, Jan 2024.</p></aside>
-</section>
-
 <!-- ACT 3 — THOUGHTCRIME & THE THOUGHT POLICE -->
 
 <!-- SLIDE 8 — thoughtcrime -->
@@ -686,14 +896,16 @@
       <path d="M28 52 Q40 48 50 52 T72 52" fill="none" stroke="var(--red)" stroke-width="1.2" opacity=".7"/>
       <path d="M30 68 Q40 64 50 68 T70 68" fill="none" stroke="var(--red)" stroke-width="1.2" opacity=".7"/>
       <line x1="50" y1="14" x2="50" y2="86" stroke="var(--red)" stroke-width="1" opacity=".5"/>
-      <circle cx="50" cy="50" r="36" fill="none" stroke="var(--red-hot)" stroke-width="1.8" stroke-dasharray="4 2"/>
-      <line x1="50" y1="6" x2="50" y2="18" stroke="var(--red-hot)" stroke-width="2"/>
-      <line x1="50" y1="82" x2="50" y2="94" stroke="var(--red-hot)" stroke-width="2"/>
-      <line x1="6" y1="50" x2="18" y2="50" stroke="var(--red-hot)" stroke-width="2"/>
-      <line x1="82" y1="50" x2="94" y2="50" stroke="var(--red-hot)" stroke-width="2"/>
-      <circle cx="50" cy="50" r="3" fill="var(--red-hot)">
-        <animate attributeName="r" values="2.5;4.5;2.5" dur="1.4s" repeatCount="indefinite"/>
-      </circle>
+      <g class="lock-target">
+        <circle cx="50" cy="50" r="36" fill="none" stroke="var(--red-hot)" stroke-width="1.8" stroke-dasharray="4 2"/>
+        <line x1="50" y1="6" x2="50" y2="18" stroke="var(--red-hot)" stroke-width="2"/>
+        <line x1="50" y1="82" x2="50" y2="94" stroke="var(--red-hot)" stroke-width="2"/>
+        <line x1="6" y1="50" x2="18" y2="50" stroke="var(--red-hot)" stroke-width="2"/>
+        <line x1="82" y1="50" x2="94" y2="50" stroke="var(--red-hot)" stroke-width="2"/>
+        <circle cx="50" cy="50" r="3" fill="var(--red-hot)">
+          <animate attributeName="r" values="2.5;4.5;2.5" dur="1.4s" repeatCount="indefinite"/>
+        </circle>
+      </g>
     </svg>
   </div>
   <aside class="notes"><p><b>SAY:</b> So in Oceania &mdash; what happens the moment you do something unorthodox? You've officially committed a thoughtcrime. And your reaction is probably mine: a thought-crime? What on earth is that?</p></aside>
@@ -738,8 +950,8 @@
 
 <!-- SLIDE 11 — hand it to a government -->
 <section class="slide prop" data-title="Hand It Over">
-  <h2>Now hand that fingerprint<br>to a <span class="big-red">government.</span></h2>
-  <p class="lead mt4" style="max-width:60%">The Thought Police needed eyes and ears in every room.<br>A model just needs your <span class="big-red">data.</span></p>
+  <h2>Now hand your <span class="big-red">data trail</span><br>to a government.</h2>
+  <p class="lead mt4" style="max-width:60%">The Thought Police needed eyes and ears in every room.<br></p>
   <div style="position:absolute;right:8vmin;top:50%;transform:translateY(-50%);width:26vmin;z-index:2">
     <svg class="motif-glitch" viewBox="0 0 100 92" style="width:100%;display:block;overflow:visible">
       <text x="50" y="6" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="6" fill="var(--red-hot)">0110 1001 0110</text>
@@ -762,7 +974,14 @@
       <rect x="10" y="84" width="80" height="6" fill="none" stroke="var(--red)" stroke-width="1.6"/>
     </svg>
   </div>
-  <aside class="notes"><p><b>SAY:</b> So far that's commerce &mdash; creepy, but it's mostly selling you shoes. Now take that exact same fingerprint we just talked about and hand it to a government &mdash; the one with a Thought Police that wants to know whether you're an enemy. The Thought Police in the book needed eyes and ears in every room. A real government just needs the data you're already shedding. Three real stories from the last eighteen months.</p></aside>
+  <aside class="notes"><p><b>SAY:</b> In the book, the Thought Police needed eyes and ears in every room. A real government doesn't &mdash; it just needs the data you're already shedding: every tap, every purchase, every place you go. Hand that trail to a state with a Thought Police that wants to know whether you're an enemy, and you don't need a telescreen at all. Three real stories from the last eighteen months.</p></aside>
+</section>
+
+<!-- point to the telescreen (moved here, leads into "is it listening?") -->
+<section class="slide prop" data-title="Your Telescreen?">
+  <h2 style="text-align:center">Can you point to the<br>telescreen watching you<br><span class="big-red">right now?</span></h2>
+  <p class="ptext mt4" style="max-width:74%;margin:0 auto;text-align:center"></p>
+  <aside class="notes"><p><b>SAY:</b> Quick one for the room &mdash; point to the telescreen watching you right now. (Let them guess.) Most of you pictured a camera, a lens, maybe your phone's front-facing cam. Here's the unsettling part: the most powerful telescreen pointed at you has no lens and no microphone at all. It never needs to see your face or hear your voice. It just reads what you do &mdash; every tap, every purchase, every place you go &mdash; and from that alone it knows you better than any camera could. Let me show you. They don't need to watch or listen to you to know everything about you.</p></aside>
 </section>
 
 <!-- SLIDE 12 — is my phone listening / FTC -->
@@ -850,15 +1069,17 @@
       <path d="M87 8 L95 8 L95 16" fill="none" stroke="var(--red-hot)" stroke-width="1.5"/>
       <path d="M95 84 L95 92 L87 92" fill="none" stroke="var(--red-hot)" stroke-width="1.5"/>
       <path d="M13 92 L5 92 L5 84" fill="none" stroke="var(--red-hot)" stroke-width="1.5"/>
-      <circle cx="50" cy="50" r="30" fill="none" stroke="var(--red-hot)" stroke-width="2"/>
-      <circle cx="50" cy="50" r="17" fill="none" stroke="var(--red-hot)" stroke-width="1" stroke-dasharray="2 3" opacity=".7"/>
-      <line x1="50" y1="14" x2="50" y2="28" stroke="var(--red-hot)" stroke-width="2"/>
-      <line x1="50" y1="72" x2="50" y2="86" stroke="var(--red-hot)" stroke-width="2"/>
-      <line x1="14" y1="50" x2="28" y2="50" stroke="var(--red-hot)" stroke-width="2"/>
-      <line x1="72" y1="50" x2="86" y2="50" stroke="var(--red-hot)" stroke-width="2"/>
-      <circle cx="50" cy="50" r="3" fill="var(--red-hot)">
-        <animate attributeName="r" values="2.5;4.5;2.5" dur="1.3s" repeatCount="indefinite"/>
-      </circle>
+      <g class="lock-target">
+        <circle cx="50" cy="50" r="30" fill="none" stroke="var(--red-hot)" stroke-width="2"/>
+        <circle cx="50" cy="50" r="17" fill="none" stroke="var(--red-hot)" stroke-width="1" stroke-dasharray="2 3" opacity=".7"/>
+        <line x1="50" y1="14" x2="50" y2="28" stroke="var(--red-hot)" stroke-width="2"/>
+        <line x1="50" y1="72" x2="50" y2="86" stroke="var(--red-hot)" stroke-width="2"/>
+        <line x1="14" y1="50" x2="28" y2="50" stroke="var(--red-hot)" stroke-width="2"/>
+        <line x1="72" y1="50" x2="86" y2="50" stroke="var(--red-hot)" stroke-width="2"/>
+        <circle cx="50" cy="50" r="3" fill="var(--red-hot)">
+          <animate attributeName="r" values="2.5;4.5;2.5" dur="1.3s" repeatCount="indefinite"/>
+        </circle>
+      </g>
     </svg>
   </div>
   <aside class="notes"><p><b>SAY:</b> Story three is the heaviest, and I'm going to tell it carefully. In Gaza, according to a major investigation by the Israeli outlet +972 Magazine, backed up by the Guardian, the military used an AI system called Lavender. At its core it's the simplest thing in machine learning &mdash; a classifier with a dial. They fed it data on known Hamas and Islamic Jihad operatives &mdash; photos, phone patterns, who they talked to, their social connections &mdash; and it learned the "characteristics" of an operative. Then it scored almost everyone in Gaza from one to a hundred: how likely the machine thinks you are a militant. Turn the dial up, and more people cross the line into "target." Now look at the features it reportedly used, because this is the part I can't unsee: being in a WhatsApp group with a known militant. Changing your phone every few months. Moving house repeatedly. Sit with that last one. Changing your number and moving house again and again is exactly what an innocent civilian does when they're displaced and fleeing bombs. The model was, in part, scoring survival as guilt. It flagged around thirty-seven thousand people. Officers told reporters the human "check" before a strike was often about twenty seconds &mdash; just long enough to confirm the target was a man. They knew going in that roughly one in ten were not militants at all. A second system, grimly named The Gospel, picked the buildings. This is the work of the people who built it, described in their own words to reporters. That is the Thought Police &mdash; not a man in a coat, a classifier with a threshold.</p>
@@ -1012,9 +1233,8 @@
       <line x1="8" y1="30" x2="82" y2="30" stroke="var(--red)" stroke-width="2"/>
       <line x1="26" y1="6" x2="26" y2="20" stroke="var(--red)" stroke-width="2.6"/>
       <line x1="64" y1="6" x2="64" y2="20" stroke="var(--red)" stroke-width="2.6"/>
-      <text x="45" y="58" text-anchor="middle" font-family="Archivo,sans-serif" font-weight="900" font-size="26" fill="var(--red-hot)">14</text>
-      <text x="40" y="76" text-anchor="middle" font-family="Archivo,sans-serif" font-weight="800" font-size="13" fill="var(--red)" opacity=".55">15</text>
-      <line x1="30" y1="72" x2="56" y2="72" stroke="var(--red-hot)" stroke-width="2.4"/>
+      <text class="d14" x="45" y="60" text-anchor="middle" font-family="Archivo,sans-serif" font-weight="900" font-size="30" fill="var(--red-hot)">14</text>
+      <text class="d15" x="45" y="60" text-anchor="middle" font-family="Archivo,sans-serif" font-weight="900" font-size="30" fill="var(--red)">15</text>
     </svg>
   </div>
   <aside class="notes"><p><b>SAY:</b> Here's one that lives in every one of us. We celebrate Independence Day on the fourteenth of August. But the law that created Pakistan &mdash; the Indian Independence Act &mdash; named the fifteenth. Jinnah's very first message to the nation called the fifteenth of August "the birthday of the independent, sovereign State of Pakistan." Our own first postage stamps, printed in 1948, say "15th August 1947." The actual legal moment was midnight, between the 14th and the 15th. In the years that followed we settled on the fourteenth &mdash; for a mix of reasons, partly that Mountbatten held our ceremony in Karachi on the 14th before flying to Delhi for India's on the 15th, partly to mark our own distinct identity. I'm not here to tell you which date is "right." I'm telling you that the date drifted, the records were quietly reconciled, and now we teach one version to our children without the footnote. That's "who controls the past" &mdash; not with a memory hole. Just with a textbook.</p>
@@ -1027,6 +1247,12 @@
 <section class="slide prop" data-title="But People Remember">
   <h2>But people <span class="big-red">remember.</span></h2>
   <p class="ptext mt3" style="max-width:86%">In the book, the Party swears the chocolate ration won't be cut. Then it cuts it &mdash; from <span class="hl">30 grams to 20.</span> The <i>next day</i> it announces the ration has been <span class="hl">raised</span> to 20 grams, and there are street celebrations to <i>thank</i> Big Brother. And people cheer. They were there yesterday. They held the 30.</p>
+  <div class="ration">
+    <span class="was">RATION&nbsp;·&nbsp;30g</span>
+    <span class="arrow">&rarr;</span>
+    <span class="now">20g</span>
+    <span class="tag">✓ raised — thank big brother</span>
+  </div>
   <aside class="notes"><p><b>SAY:</b> Here's the catch with rewriting the past: people lived through the old version. There's a perfect little example in the book. The Party promises the chocolate ration won't be cut. Then it cuts it &mdash; from thirty grams a week down to twenty. And the very next day, the Party announces it has raised the chocolate ration to twenty grams &mdash; and there are actual celebrations in the street to thank Big Brother for his generosity. And people are grateful. Genuinely. But they were alive yesterday. They had thirty grams in their hand. How do you celebrate getting less as if it were a gift &mdash; and truly mean it, not just fake a smile? You would need a very specific mental skill. The Party built one, and gave it a name: doublethink.</p>
   <p class="ref">Chocolate ration cut to 20g while "last week the ration had been thirty grammes"; "demonstrations to thank Big Brother for raising the chocolate ration to twenty grammes a week" &mdash; 1984, Part 1, Ch. 5.</p></aside>
 </section>
@@ -1037,6 +1263,10 @@
   <p class="ptext mt3" style="max-width:80%">to hold two opposite beliefs at the same time &mdash; to <i>know</i> they contradict &mdash; and to believe <span class="hl">both</span>, completely.</p>
   <p class="quote mt3" style="font-size:3.2vmin">"In the end the Party would announce that two and two made five, and you would have to believe it."
     <span class="src">Nineteen Eighty-Four</span></p>
+  <div class="bb-eq">2 + 2 =
+    <span class="res"><span class="four">4</span><span class="five">5</span></span>
+    <span class="obey">accepted</span>
+  </div>
   <div style="position:absolute;right:7vmin;top:8vmin;width:20vmin;z-index:2">
     <svg class="motif-glitch" viewBox="0 0 100 50" style="width:100%;display:block;overflow:visible">
       <path d="M22 25 C22 9 38 9 50 25 C62 41 78 41 78 25 C78 9 62 9 50 25 C38 41 22 41 22 25 Z"
@@ -1077,19 +1307,20 @@
       <text x="40" y="6" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="4" fill="var(--red-hot)">DICTIONARY &darr;</text>
       <rect x="6" y="10" width="68" height="90" fill="none" stroke="var(--red)" stroke-width="1.4"/>
       <g font-family="JetBrains Mono,monospace" font-size="6" fill="var(--red-hot)">
-        <text x="14" y="22">freedom</text>
-        <line x1="13" y1="20" x2="58" y2="20" stroke="var(--red-hot)" stroke-width="1.5"/>
-        <text x="14" y="34">privacy</text>
-        <line x1="13" y1="32" x2="52" y2="32" stroke="var(--red-hot)" stroke-width="1.5"/>
-        <text x="14" y="46">dissent</text>
-        <line x1="13" y1="44" x2="52" y2="44" stroke="var(--red-hot)" stroke-width="1.5"/>
-        <text x="14" y="58">protest</text>
-        <line x1="13" y1="56" x2="52" y2="56" stroke="var(--red-hot)" stroke-width="1.5"/>
-        <text x="14" y="70">truth</text>
-        <line x1="13" y1="68" x2="42" y2="68" stroke="var(--red-hot)" stroke-width="1.5"/>
-        <text x="14" y="82" opacity=".5">history</text>
-        <line x1="13" y1="80" x2="50" y2="80" stroke="var(--red-hot)" stroke-width="1.4" opacity=".5"/>
-        <text x="14" y="94" opacity=".22">memory</text>
+        <text class="nsword" style="--d:0s"    x="14" y="22">freedom</text>
+        <line class="nsstrike" style="--d:0s"    x1="13" y1="20" x2="58" y2="20" stroke="var(--red-hot)" stroke-width="1.5"/>
+        <text class="nsword" style="--d:.9s"   x="14" y="34">privacy</text>
+        <line class="nsstrike" style="--d:.9s"   x1="13" y1="32" x2="52" y2="32" stroke="var(--red-hot)" stroke-width="1.5"/>
+        <text class="nsword" style="--d:1.8s"  x="14" y="46">dissent</text>
+        <line class="nsstrike" style="--d:1.8s"  x1="13" y1="44" x2="52" y2="44" stroke="var(--red-hot)" stroke-width="1.5"/>
+        <text class="nsword" style="--d:2.7s"  x="14" y="58">protest</text>
+        <line class="nsstrike" style="--d:2.7s"  x1="13" y1="56" x2="52" y2="56" stroke="var(--red-hot)" stroke-width="1.5"/>
+        <text class="nsword" style="--d:3.6s"  x="14" y="70">truth</text>
+        <line class="nsstrike" style="--d:3.6s"  x1="13" y1="68" x2="42" y2="68" stroke="var(--red-hot)" stroke-width="1.5"/>
+        <text class="nsword" style="--d:4.5s"  x="14" y="82">history</text>
+        <line class="nsstrike" style="--d:4.5s"  x1="13" y1="80" x2="50" y2="80" stroke="var(--red-hot)" stroke-width="1.4"/>
+        <text class="nsword" style="--d:5.4s"  x="14" y="94">memory</text>
+        <line class="nsstrike" style="--d:5.4s"  x1="13" y1="92" x2="50" y2="92" stroke="var(--red-hot)" stroke-width="1.4"/>
       </g>
     </svg>
   </div>
@@ -1210,23 +1441,28 @@
 <!-- SLIDE 33 — connect the dots / close -->
 <section class="slide prop" data-title="Don't Let It Happen">
   <span class="xhair tl"></span><span class="xhair tr"></span><span class="xhair bl"></span><span class="xhair br"></span>
-  <h2 style="font-size:4.8vmin">Winston <span class="big-red">lost.</span></h2>
-  <p class="ptext mt3" style="max-width:80%;font-size:2vmin;line-height:1.75">The book ends with him broken &mdash; loving Big Brother. He had no way out: the Party owned the screens he watched, the words he could think in, the history he remembered, and in the end, the man himself.</p>
-  <p class="lead mt4" style="max-width:82%;font-size:3vmin">We are not in Oceania. <span class="big-red">Not yet.</span> The watcher on every wall, the rewritten past, the shrinking words, the dissolving self &mdash; every piece of it is already here. The one thing Winston never had, and we still do, is the chance to <span class="big-red">notice</span> &mdash; before habit becomes instinct.</p>
-  <div class="eye-wrap glitch" style="position:absolute;left:50%;bottom:5vmin;transform:translateX(-50%);width:20vmin;z-index:2">
-    <svg class="motif big" viewBox="0 0 120 70" style="width:100%">
-      <path d="M4 35 C28 6 92 6 116 35 C92 64 28 64 4 35 Z" fill="none" stroke="var(--red)" stroke-width="2.2"/>
-      <circle cx="60" cy="35" r="16" fill="none" stroke="var(--red)" stroke-width="2.2"/>
-      <circle cx="60" cy="35" r="5.5" fill="var(--red-hot)"/>
-    </svg>
-    <svg class="motif eye-ghost r" viewBox="0 0 120 70" style="width:100%">
-      <path d="M4 35 C28 6 92 6 116 35 C92 64 28 64 4 35 Z" fill="none" stroke="#ff003c" stroke-width="2.2"/>
-      <circle cx="60" cy="35" r="16" fill="none" stroke="#ff003c" stroke-width="2.2"/>
-    </svg>
-    <svg class="motif eye-ghost b" viewBox="0 0 120 70" style="width:100%">
-      <path d="M4 35 C28 6 92 6 116 35 C92 64 28 64 4 35 Z" fill="none" stroke="#00b3ff" stroke-width="2.2"/>
-      <circle cx="60" cy="35" r="16" fill="none" stroke="#00b3ff" stroke-width="2.2"/>
-    </svg>
+  <h2 style="font-size:7vmin;text-align:center">Winston <span class="big-red">lost.</span></h2>
+  <p class="end-lastline">&ldquo;He loved <span class="big-red">Big Brother.</span>&rdquo;</p>
+  <p class="ptext mt3" style="max-width:80%;margin-left:auto;margin-right:auto;text-align:center;font-size:2vmin;line-height:1.75">The book ends with him broken &mdash; loving Big Brother. He had no way out: the Party owned the screens he watched, the words he could think in, the history he remembered, and in the end, the man himself.</p>
+  <p class="lead mt4" style="max-width:82%;margin-left:auto;margin-right:auto;text-align:center;font-size:3vmin">We are not in Oceania. <span class="big-red">Not yet.</span> The watcher on every wall, the rewritten past, the shrinking words, the dissolving self &mdash; every piece of it is already here. The one thing Winston never had, and we still do, is the chance to <span class="big-red">notice</span> &mdash; before habit becomes instinct.</p>
+  <!-- the surveillance feed from slide 1 returns: same eye, same four words, same live clock -->
+  <div class="end-feed">Big Brother is watching <b>you</b> &nbsp;·&nbsp; <span class="dot">●</span> REC &nbsp;·&nbsp; <span class="bb-clock">00:00:00</span></div>
+  <div class="end-stage">
+    <span class="end-ring"></span><span class="end-ring d2"></span><span class="end-ring d3"></span>
+    <div class="end-eyewrap">
+      <svg class="end-eye motif-glitch" viewBox="0 0 220 130" style="overflow:visible">
+        <path d="M8 65 C46 16 174 16 212 65 C174 114 46 114 8 65 Z" fill="none" stroke="var(--red)" stroke-width="2.4"/>
+        <g id="endIris">
+          <circle cx="110" cy="65" r="35" fill="none" stroke="var(--red)" stroke-width="2.2"/>
+          <circle cx="110" cy="65" r="31" fill="none" stroke="var(--red)" stroke-width=".9" stroke-dasharray="2 4" opacity=".8"/>
+          <circle cx="110" cy="65" r="24" fill="none" stroke="var(--red)" stroke-width=".7" stroke-dasharray="1.5 5" opacity=".6"/>
+          <circle id="endPupil" cx="110" cy="65" r="12" fill="var(--red-hot)"/>
+          <circle cx="105" cy="59" r="3" fill="#fff" opacity=".85"/>
+          <animateTransform attributeName="transform" type="translate" values="0 0;13 -4;13 -4;-13 4;-13 4;6 6;0 0;0 0" keyTimes="0;0.14;0.34;0.48;0.64;0.78;0.9;1" dur="9s" repeatCount="indefinite"/>
+        </g>
+      </svg>
+    </div>
+    <span class="end-scan"></span>
   </div>
   <aside class="notes"><p><b>SAY:</b> So the book ends, and Winston loses. Completely. The last line is "He loved Big Brother." There is no rescue and no escape, because in Oceania there was nowhere to go &mdash; the Party owned the screens he watched, the words he was allowed to think in, the history he was allowed to remember, and by the end, the man himself. Now look around this room. The watcher on every wall &mdash; we carry it in our pockets. The rewritten past &mdash; it's in our feeds and our textbooks. The shrinking language, the predicted thought, the self dissolving into the feed &mdash; every single piece of Winston's world is already here. We are not in Oceania. Not yet. And the one thing Winston never had &mdash; the thing we still have tonight &mdash; is the chance to notice it while it is still a choice, before it hardens from a habit into an instinct. That is the whole reason for a talk like this. Not to frighten you. Just to make you notice. Thank you.</p></aside>
 </section>
@@ -1368,5 +1604,44 @@
   show(Number.isFinite(start) && start>0 ? start-1 : 0);
 })();
 </script>
+
+<script>
+/* Slide 1: the watching eye scans on its own (no cursor) + live feed clock. */
+(function(){
+  const iris  = document.getElementById('bbIris');
+  const coord = document.getElementById('bbCoord');
+
+  // ---- autonomous wandering scan (Lissajous path, slow + uneasy) ----
+  if(iris){
+    const MAX_X = 16, MAX_Y = 9;
+    let t = 0;
+    (function frame(){
+      t += 0.011;
+      const nx = Math.sin(t) * 0.82 + Math.sin(t * 0.37 + 1.1) * 0.18;
+      const ny = Math.sin(t * 0.8 + 1.3) * 0.7;
+      const cx = nx * MAX_X, cy = ny * MAX_Y;
+      iris.setAttribute('transform', `translate(${cx.toFixed(2)} ${cy.toFixed(2)})`);
+      if(coord){
+        const az = Math.round(cx / MAX_X *  30);
+        const el = Math.round(cy / MAX_Y * -15);
+        const s  = n => (n >= 0 ? '+' : '') + n;
+        coord.textContent = `AZ ${s(az)} EL ${s(el)}`;
+      }
+      requestAnimationFrame(frame);
+    })();
+  }
+
+  // ---- live-feed clock (drives every .bb-clock: opener + finale) ----
+  const clocks = document.querySelectorAll('.bb-clock');
+  if(clocks.length){
+    const pad = n => String(n).padStart(2,'0');
+    const tick = ()=>{ const d = new Date();
+      const t = pad(d.getHours())+':'+pad(d.getMinutes())+':'+pad(d.getSeconds());
+      clocks.forEach(c => c.textContent = t); };
+    tick(); setInterval(tick, 1000);
+  }
+})();
+</script>
+
 </body>
 </html>
